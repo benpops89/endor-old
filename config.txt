@@ -1,0 +1,12 @@
+# This file is provided as a placeholder for user options
+# AlmaLinux - few default config options
+
+[pi4]
+arm_boost=1
+
+[all]
+# enable serial console
+enable_uart=1
+
+# Enable PWM fan
+dtoverlay=gpio-fan,gpiopin=18,temp=55000

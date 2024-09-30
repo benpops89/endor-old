@@ -1,0 +1,43 @@
+#cloud-config
+
+hostname: endor
+locale: en_GB.UTF-8
+timezone: Europe/London
+ssh_pwauth: false
+ntp:
+  enabled: true
+
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      dhcp6: false
+
+users:
+  - name: almalinux
+    groups: [adm, systemd-journal, docker]
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    lock_passwd: true
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDLZTmI3ao4ZrAxFLYQ0dLHwlufS7ZAOum5SxCkESO8e2NoaVD6q6AS3ez9L14txiMSP8WnIvzEsAQYkvTvBtmuHNprh9PG+UPXn9OtU2VNZcMJZq+b8YLG5ULFG23oMHfjRogChdqWJ/JOccJVU5vbbQnkaDABb6sYH9rtCYYfCofjrz0f8yuWq1ewcE2Odp9FHq3lvJDzrcfRTRLbvcPh+WfdZwbOqhngtIWp0ljVxIUrim4KXYjLds6gAz93Y45QUUSF+9xrNnAoXLsvQbLltNxqk0JXfPWQ1H3f3kxXbhlKOXakJYT/EX/4zMWQvoZwul+6FYCvMuSxNWZtYvBsBarr7wH2WYSvVng7a0DGRajlnuJD3xAgnfcT7PxH+qkuQnP21ju1kOTX2L11CImUpSbZWte+XmEiNnedjfso/k1Ha8MtA4NVIrcg/B+BuhcQOFblPTxlD6z4oF+6iCA3lMaGF9FbfjzztmnL4u+cyM10UpFbN9XiGejoMw4P1B8= ben@pop-os
+
+yum_repos:
+  docker:
+    baseurl: https://download.docker.com/linux/centos/9/aarch64/stable
+    enabled: true
+    gpgcheck: true
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    name: Docker CE Stable - aarch64
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - docker-ce
+  - docker-ce-cli
+  - containerd.io
+
+runcmd:
+  - systemctl enable docker
+  - systemctl start docker
